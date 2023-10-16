@@ -1,14 +1,15 @@
 import { ChangeEvent, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
   CategoryScale,
-  LinearScale,
-  PointElement,
+  Chart as ChartJS,
+  Legend,
   LineElement,
+  LinearScale,
+  LogarithmicScale,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
 import { Grid } from "@mui/material";
 
@@ -17,6 +18,7 @@ import FileInputButton from "./FileInputButton";
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  LogarithmicScale,
   PointElement,
   LineElement,
   Title,
@@ -153,7 +155,21 @@ const LogViewer = () => {
       <FileInputButton onChange={handleFile}>Upload</FileInputButton>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Line options={options} data={lossData} />
+          <Line
+            options={{
+              ...options,
+              scales: {
+                x: {
+                  display: true,
+                },
+                y: {
+                  display: true,
+                  type: "logarithmic",
+                },
+              },
+            }}
+            data={lossData}
+          />
         </Grid>
         <Grid item xs={6}>
           <Line options={options} data={lrData} />
