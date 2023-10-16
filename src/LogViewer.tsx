@@ -14,6 +14,7 @@ import {
 import { Grid } from "@mui/material";
 
 import FileInputButton from "./FileInputButton";
+import JsonViewer from "./JsonViewer";
 
 ChartJS.register(
   CategoryScale,
@@ -44,6 +45,7 @@ interface jsonDataProps {
 }
 
 const LogViewer = () => {
+  const [data, setData] = useState<jsonDataProps>();
   const [loss, setLoss] = useState<number[]>([]);
   const [lr, setLr] = useState<number[]>([]);
   const [rewards, setRewards] = useState<number[]>([]);
@@ -57,6 +59,7 @@ const LogViewer = () => {
     const file = e.target.files?.item(0);
     reader.onload = () => {
       const jsonData: jsonDataProps = JSON.parse(reader.result as string);
+      setData(jsonData);
       jsonData.batch_logs.forEach((batch) => {
         setLoss((prev) => [...prev, batch.loss]);
         setLr((prev) => [...prev, batch.lr]);
@@ -154,7 +157,7 @@ const LogViewer = () => {
     <>
       <FileInputButton onChange={handleFile}>Upload</FileInputButton>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Line
             options={{
               ...options,
@@ -171,14 +174,17 @@ const LogViewer = () => {
             data={lossData}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Line options={options} data={lrData} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Line options={options} data={rewardsData} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Line options={options} data={actionData} />
+        </Grid>
+        <Grid item xs={12}>
+          <JsonViewer data={data ?? {}} />
         </Grid>
       </Grid>
     </>
