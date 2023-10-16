@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
+import { Box, Tab, Tabs } from "@mui/material";
+
+import LogViewer from "./LogViewer";
+import TabPanel from "./TabPanel";
+
+const App = () => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Box>
+          <Tabs value={value} onChange={handleChange}>
+            <Tab label="Log Viewer" />
+            <Tab label="Buy/Sell Viewer" />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <LogViewer />
+        </TabPanel>
+        <TabPanel value={value} index={1}></TabPanel>
       </header>
     </div>
   );
-}
+};
 
 export default App;
